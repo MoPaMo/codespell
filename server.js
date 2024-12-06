@@ -51,6 +51,39 @@ app.get('/', (req, res) => {
 });
 
 // Handle File Upload and Spellcheck
+app.post('/upload', (req, res) => {
+    upload(req, res, function (err) {
+        if (err instanceof multer.MulterError) {
+            // Multer errors
+            return res.status(400).render('index', { error: err.message });
+        } else if (err) {
+            // Other errors
+            return res.status(400).render('index', { error: err.message });
+        }
+
+        if (!req.file) {
+            return res.status(400).render('index', { error: 'No file uploaded.' });
+        }
+
+        const filePath = path.join(__dirname, req.file.path);
+
+        try {
+            const ipynbData = readIpynb(filePath);
+            const markdownTexts = getMarkdownCells(ipynbData);
+            const misspelledWords = checkSpelling(markdownTexts);
+
+            // delete file after processing
+            fs.unlinkSync(filePath);
+
+            res.render('result', { results: misspelledWords });
+        } catch (error) {
+            // delete file in case of error
+            fs.unlinkSync(filePath);
+            res.status(500).render('index', { error: error.message });
+        }
+    });
+});
+
 
 
 // Start the Server!!
