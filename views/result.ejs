@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>codeSpell - Spellcheck Results</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Spellcheck Results</h1>
     <% if (results.length === 0) { %>
-        <p>No spelling errors found!</p>
+    <p>No spelling errors found!</p>
     <% } else { %>
-        <ul>
-            <% results.forEach(function(error) { %>
-                <li>
-                    Cell: <%= error.cell %> - Misspelled Word: <%= error.word %>
-                    Suggestions: <%= error.suggestions.join(', ') || 'No suggestions available' %>
-                </li>
-            <% }); %>
-        </ul>
+    <ul>
+      <% results.forEach(function(error) { %>
+      <li>
+        Cell: <%= error.cell %> - Misspelled Word: <%= error.word %>
+        Suggestions: <%= error.suggestions.join(', ') || 'No suggestions
+        available' %>
+      </li>
+      <% }); %>
+    </ul>
     <% } %>
     <a href="/">Check another file</a>
-</body>
+  </body>
 </html>
