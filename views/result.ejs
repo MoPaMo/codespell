@@ -3,22 +3,38 @@
   <head>
     <meta charset="UTF-8" />
     <title>codeSpell - Spellcheck Results</title>
+    <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <h1>Spellcheck Results</h1>
-    <% if (results.length === 0) { %>
-    <p>No spelling errors found!</p>
-    <% } else { %>
-    <ul>
-      <% results.forEach(function(error) { %>
-      <li>
-        Cell: <%= error.cell %> - Misspelled Word: <%= error.word %>
-        Suggestions: <%= error.suggestions.join(', ') || 'No suggestions
-        available' %>
-      </li>
-      <% }); %>
-    </ul>
-    <% } %>
-    <a href="/">Check another file</a>
+    <div class="container">
+      <h1>Spellcheck Results</h1>
+      <% if (results.length === 0) { %>
+      <p>No spelling errors found!</p>
+      <% } else { %>
+      <table>
+        <thead>
+          <tr>
+            <th>Cell</th>
+            <th>Misspelled Word</th>
+            <th>Suggestions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% results.forEach(function(error) { %>
+          <tr>
+            <td><%= error.cell %></td>
+            <td><%= error.word %></td>
+            <td>
+              <% if (error.suggestions.length > 0) { %> <%=
+              error.suggestions.join(', ') %> <% } else { %> No suggestions
+              available <% } %>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+      <% } %>
+      <a href="/">&#8592; Check another file</a>
+    </div>
   </body>
 </html>
