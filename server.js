@@ -5,6 +5,7 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const { readIpynb, getMarkdownCells, checkSpelling } = require("./spellcheck");
 const fs = require("fs");
+const fsPromises = fs.promises; 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
