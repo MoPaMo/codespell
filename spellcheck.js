@@ -2,8 +2,8 @@
 const fs = require("fs");
 const spellchecker = require("spellchecker");
 
-
-function readIpynb(filePath) { // parses ipynb
+function readIpynb(filePath) {
+  // parses ipynb
   try {
     const rawData = fs.readFileSync(filePath, "utf8");
     const jsonData = JSON.parse(rawData);
@@ -13,8 +13,8 @@ function readIpynb(filePath) { // parses ipynb
   }
 }
 
-
-function getMarkdownCells(ipynbData) { //what the name says
+function getMarkdownCells(ipynbData) {
+  //what the name says
   if (!ipynbData.cells) {
     throw new Error('Invalid .ipynb file: Missing "cells" key.');
   }
@@ -25,12 +25,12 @@ function getMarkdownCells(ipynbData) { //what the name says
   return markdownCells.map((cell) => cell.source.join(" "));
 }
 
-
-function checkSpelling(textArray) { //spellcheck
+function checkSpelling(textArray) {
+  //spellcheck
   const misspelled = [];
 
   textArray.forEach((text, cellIndex) => {
-    // Split text into words
+    // Split text into words using regex to handle various punctuation
     const words = text.split(/\s+/);
 
     words.forEach((word) => {
