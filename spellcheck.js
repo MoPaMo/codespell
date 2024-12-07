@@ -27,10 +27,14 @@ function getMarkdownCells(ipynbData) {
 
 function checkSpelling(textArray) {
   //spellcheck
+  if (!Array.isArray(textArray)) {
+    throw new Error("Invalid input: textArray must be an array of strings.");
+  }
   const misspelled = [];
 
   textArray.forEach((text, cellIndex) => {
     // Split text into words using regex to handle various punctuation
+
     const words = text.split(/\s+/);
 
     words.forEach((word) => {
