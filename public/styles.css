@@ -55,3 +55,36 @@ button:hover {
   border: 1px solid #ebccd1;
   border-radius: 4px;
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+table,
+th,
+td {
+  border: 1px solid #ddd;
+}
+
+th,
+td {
+  padding: 12px;
+  text-align: left;
+}
+
+th {
+  background-color: #f4f4f4;
+}
+
+a {
+  display: inline-block;
+  margin-top: 20px;
+  text-decoration: none;
+  color: #337ab7;
+}
+
+a:hover {
+  text-decoration: underline;
+}
