@@ -44,11 +44,20 @@ function checkSpelling(textArray) {
       // Clean word (removie punctuation + numbers)
       const cleanWord = word.replace(/[.,/#!$%^&*;:{}=\-_`~()0-9]/g, "");
       if (cleanWord && spellchecker.isMisspelled(cleanWord)) {
-        const corrections =
-          spellchecker.getCorrectionsForMisspelling(cleanWord);
+        let corrections = [];
+
+        try {
+          corrections = spellchecker.getCorrectionsForMisspelling(cleanWord);
+        } catch (err) {
+          console.error(
+            `Error fetching corrections for "${cleanWord}": ${err.message}`
+          );
+        }
+
         misspelled.push({
           word: cleanWord,
-          suggestions: corrections,
+          suggestions:
+            corrections.length > 0 ? corrections : ["No suggestions"],
           cell: cellIndex + 1,
         });
       }
