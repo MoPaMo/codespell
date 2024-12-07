@@ -34,7 +34,10 @@ function checkSpelling(textArray) {
 
   textArray.forEach((text, cellIndex) => {
     // Split text into words using regex to handle various punctuation
-
+    if (typeof text !== "string") {
+      console.warn(`Skipping non-string entry at index ${cellIndex}.`);
+      return;
+    }
     const words = text.split(/\s+/);
 
     words.forEach((word) => {
