@@ -55,6 +55,7 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
+
 // Handle File Upload and Spellcheck
 app.post("/upload", async (req, res) => {
   upload(req, res, async function (err) {
@@ -108,6 +109,10 @@ app.post("/upload", async (req, res) => {
   });
 });
 
+// Redirect all 404s to homepage
+app.use((req, res, next) => {
+    res.status(404).redirect("/");
+});
 // Start the Server!!
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
