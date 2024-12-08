@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const { readIpynb, getMarkdownCells, checkSpelling } = require("./spellcheck");
 const fs = require("fs");
 const fsPromises = fs.promises;
-const marked = require("marked"); // Import marked
+const { marked } = require("marked");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -120,7 +120,7 @@ app.post("/upload", async (req, res) => {
         return annotateText(text, wordsToAnnotate);
       });
       const annotatedHtml = annotatedMarkdowns.map((markdown) =>
-        marked(markdown)
+        marked.parse(markdown)
       );
 
       // Render results
