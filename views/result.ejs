@@ -1,39 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
     <title>codeSpell - Spellcheck Results</title>
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
     <div class="container">
       <h1>Spellcheck Results</h1>
-      <% if (results.length === 0) { %>
-      <p>No spelling errors found!</p>
+      <% if (results && results.length > 0) { %>
+      <div class="error">
+        <h2>Misspelled Words</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Word</th>
+              <th>Suggestions</th>
+              <th>Cell</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% results.forEach(function(item) { %>
+            <tr>
+              <td><%= item.word %></td>
+              <td><%= item.suggestions.join(", ") %></td>
+              <td><%= item.cell %></td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
       <% } else { %>
-      <table>
-        <thead>
-          <tr>
-            <th>Cell</th>
-            <th>Misspelled Word</th>
-            <th>Suggestions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% results.forEach(function(error) { %>
-          <tr>
-            <td><%= error.cell %></td>
-            <td><%= error.word %></td>
-            <td>
-              <% if (error.suggestions.length > 0) { %> <%=
-              error.suggestions.join(', ') %> <% } else { %> No suggestions
-              available <% } %>
-            </td>
-          </tr>
-          <% }); %>
-        </tbody>
-      </table>
-      <% } %>
+      <div class="success">
+        <p>No spelling errors found!</p>
+      </div>
+      <% } %> <% if (annotatedHtml && annotatedHtml.length > 0) { %>
+      <h2>Annotated Markdown Cells</h2>
+      <% annotatedHtml.forEach(function(htmlContent, index) { %>
+      <div class="markdown-cell">
+        <h3>Cell <%= index + 1 %></h3>
+        <div class="cell-content"><%= htmlContent %></div>
+      </div>
+      <% }); %> <% } %>
+
       <a href="/">&#8592; Check another file</a>
     </div>
   </body>
