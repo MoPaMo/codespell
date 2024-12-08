@@ -5,7 +5,8 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const { readIpynb, getMarkdownCells, checkSpelling } = require("./spellcheck");
 const fs = require("fs");
-const fsPromises = fs.promises; 
+const fsPromises = fs.promises;
+const marked = require("marked"); // Import marked
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -51,11 +52,21 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB file size limit
 }).single("notebook");
 
-// Home Page - Upload Form
-app.get("/", (req, res) => {
-  res.render("index");
-});
+function annotateText(text, misspelledWords) {
+  // Escape special regex characters in words
+  const escapeRegExp = (string) =>
+    string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
+  // Sort words by length descending to prevent partial matches
+  misspelledWords.sort((a, b) => b.length - a.length);
+
+  misspelledWords.forEach((word) => {
+    const regex = new RegExp(`\\b(${escapeRegExp(word)})\\b`, "g");
+    text = text.replace(regex, `<span class="misspelled">$1</span>`);
+  });
+
+  return text;
+}
 
 // Handle File Upload and Spellcheck
 app.post("/upload", async (req, res) => {
@@ -91,9 +102,28 @@ app.post("/upload", async (req, res) => {
       const ipynbData = readIpynb(filePath);
       const markdownTexts = getMarkdownCells(ipynbData);
       const misspelledWords = checkSpelling(markdownTexts);
+      const misspelledByCell = {};
+      misspelledWords.forEach((item) => {
+        if (!misspelledByCell[item.cell]) {
+          misspelledByCell[item.cell] = [];
+        }
+        misspelledByCell[item.cell].push(item.word);
+      });
+
+      const annotatedMarkdowns = markdownTexts.map((text, index) => {
+        const cellNumber = index + 1;
+        const wordsToAnnotate = misspelledByCell[cellNumber] || [];
+        return annotateText(text, wordsToAnnotate);
+      });
+      const annotatedHtml = annotatedMarkdowns.map((markdown) =>
+        marked(markdown)
+      );
 
       // Render results
-      res.render("result", { results: misspelledWords });
+      res.render("result", {
+        results: misspelledWords,
+        annotatedHtml: annotatedHtml,
+      });
     } catch (error) {
       console.error("Processing error:", error);
       res.status(500).render("index", {
@@ -112,7 +142,7 @@ app.post("/upload", async (req, res) => {
 
 // Redirect all 404s to homepage
 app.use((req, res, next) => {
-    res.status(404).redirect("/");
+  res.status(404).redirect("/");
 });
 // Start the Server!!
 app.listen(PORT, () => {
