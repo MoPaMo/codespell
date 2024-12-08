@@ -166,3 +166,13 @@ a:hover {
   color: #555555;
   flex-grow: 1;
 }
+
+.misspelled {
+  background-color: #ffdddd;
+  color: #d8000c;
+  border-bottom: 2px dashed #d8000c;
+  padding: 0 2px;
+  position: relative;
+  cursor: pointer;
+}
+
