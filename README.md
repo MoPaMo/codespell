@@ -8,3 +8,6 @@ Well wait no more :D
 
 
 codeSpell let's you upload your `.ipynb` files and automatically checks all markdown cells for errors using [spellchecker](https://www.npmjs.com/package/spellchecker).
+
+
+You can try a demo here: https://code-spell.glitch.me/ (Note that this uses old spellchecking version because glitch only supports up to v16)
