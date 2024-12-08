@@ -62,11 +62,11 @@ function annotateText(text, misspelledWords) {
     string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
   // Sort words by length descending to prevent partial matches
-  misspelledWords.sort((a, b) => b.length - a.length);
-
+  misspelledWords.sort((a, b) => b.word.length - a.word.length);
+    console.log(misspelledWords);
   misspelledWords.forEach((word) => {
-    const regex = new RegExp(`\\b(${escapeRegExp(word)})\\b`, "g");
-    text = text.replace(regex, `<span class="misspelled">$1</span>`);
+    const regex = new RegExp(`\\b(${escapeRegExp(word.word)})\\b`, "g");
+    text = text.replace(regex, `<span class="misspelled" data-suggestions="${word.suggestions.join(', ')}">$1</span>`);
   });
 
   return text;
@@ -111,7 +111,7 @@ app.post("/upload", async (req, res) => {
         if (!misspelledByCell[item.cell]) {
           misspelledByCell[item.cell] = [];
         }
-        misspelledByCell[item.cell].push(item.word);
+        misspelledByCell[item.cell].push(item);
       });
 
       const annotatedMarkdowns = markdownTexts.map((text, index) => {

@@ -176,3 +176,17 @@ a:hover {
   cursor: pointer;
 }
 
+.misspelled:hover::after {
+  content: attr(data-suggestions);
+  position: absolute;
+  background-color: #333;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 100;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0.9;
+}
